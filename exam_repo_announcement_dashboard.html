@@ -69,22 +69,22 @@
               <li class="flex gap-3">
                 <span class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold">1</span>
                 <div>
-                  <p class="font-semibold">เลือกตำแหน่งที่สมัคร</p>
-                  <p class="text-sm text-slate-600">เลือก Frontend, Backend หรือ Full Stack ให้ตรงกับโจทย์สอบ</p>
+                  <p class="font-semibold">กรอกรหัสนิสิต</p>
+                  <p class="text-sm text-slate-600">ระบบจะค้นหาชื่อ-นามสกุลและประเภทนิสิตให้อัตโนมัติจาก Google Sheets</p>
                 </div>
               </li>
               <li class="flex gap-3">
                 <span class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold">2</span>
                 <div>
-                  <p class="font-semibold">Clone repo และพัฒนาโปรเจกต์</p>
-                  <p class="text-sm text-slate-600">พัฒนาโค้ดตามเงื่อนไขที่กำหนด และ push ขึ้น GitHub ของตนเอง</p>
+                  <p class="font-semibold">เลือกตำแหน่งและ clone repo</p>
+                  <p class="text-sm text-slate-600">เลือก Frontend, Backend หรือ Full Stack ให้ตรงกับโจทย์สอบ แล้วคัดลอกคำสั่ง git clone</p>
                 </div>
               </li>
               <li class="flex gap-3">
                 <span class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold">3</span>
                 <div>
-                  <p class="font-semibold">กรอกแบบฟอร์มส่งงาน</p>
-                  <p class="text-sm text-slate-600">ระบบจะบันทึกข้อมูลลง Google Sheets ผ่าน Apps Script</p>
+                  <p class="font-semibold">ส่งงานและติดตามผลแบบเรียลไทม์</p>
+                  <p class="text-sm text-slate-600">ข้อมูลจะถูกบันทึกลง Google Sheets และ Dashboard จะรีเฟรชอัตโนมัติทุก 5 วินาที</p>
                 </div>
               </li>
             </ol>
@@ -103,7 +103,12 @@
               </div>
               <div>
                 <label class="text-sm font-medium">ชื่อ-นามสกุล</label>
-                <input name="fullName" required class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-700" placeholder="ชื่อผู้ส่งงาน" />
+                <input name="fullName" required readonly class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 focus:outline-none" placeholder="กรอกรหัสนิสิตเพื่อดึงชื่ออัตโนมัติ" />
+                <p id="studentLookupStatus" class="mt-1 text-xs text-slate-500"></p>
+              </div>
+              <div>
+                <label class="text-sm font-medium">ประเภทนิสิต</label>
+                <input name="studyType" required readonly class="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 focus:outline-none" placeholder="กรอกรหัสนิสิตเพื่อดึงประเภทอัตโนมัติ" />
               </div>
               <div>
                 <label class="text-sm font-medium">ตำแหน่งที่สมัคร</label>
@@ -147,6 +152,7 @@
                     <th class="text-left px-4 py-3 rounded-l-2xl">เวลา</th>
                     <th class="text-left px-4 py-3">รหัส</th>
                     <th class="text-left px-4 py-3">ชื่อ</th>
+                    <th class="text-left px-4 py-3">ประเภทนิสิต</th>
                     <th class="text-left px-4 py-3">ตำแหน่ง</th>
                     <th class="text-left px-4 py-3">สถานะ</th>
                     <th class="text-left px-4 py-3 rounded-r-2xl">คะแนน</th>
@@ -157,6 +163,7 @@
                     <td class="px-4 py-3">12:38:37</td>
                     <td class="px-4 py-3">6612345678</td>
                     <td class="px-4 py-3">สมชาย ใจดี</td>
+                    <td class="px-4 py-3">ภาคปกติ</td>
                     <td class="px-4 py-3">Frontend</td>
                     <td class="px-4 py-3"><span class="rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold">ส่งแล้ว</span></td>
                     <td class="px-4 py-3">85</td>
@@ -165,6 +172,7 @@
                     <td class="px-4 py-3">12:31:50</td>
                     <td class="px-4 py-3">6612345679</td>
                     <td class="px-4 py-3">กมลชนก ดีงาม</td>
+                    <td class="px-4 py-3">ภาคพิเศษ</td>
                     <td class="px-4 py-3">Backend</td>
                     <td class="px-4 py-3"><span class="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">รอตรวจ</span></td>
                     <td class="px-4 py-3">-</td>
@@ -173,6 +181,7 @@
                     <td class="px-4 py-3">12:29:48</td>
                     <td class="px-4 py-3">6612345680</td>
                     <td class="px-4 py-3">พัชราภรณ์ แสนดี</td>
+                    <td class="px-4 py-3">ภาคปกติ</td>
                     <td class="px-4 py-3">Full Stack</td>
                     <td class="px-4 py-3"><span class="rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold">ยังไม่ส่ง Demo</span></td>
                     <td class="px-4 py-3">72</td>
@@ -209,6 +218,11 @@
             <h2 class="text-xl font-bold">ตัวกรองข้อมูล</h2>
             <div class="mt-4 space-y-4">
               <input id="searchInput" oninput="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3" placeholder="ค้นหาชื่อ / รหัส" />
+              <select id="studyTypeFilter" onchange="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3">
+                <option value="">ทุกประเภทนิสิต</option>
+                <option value="ภาคปกติ">ภาคปกติ</option>
+                <option value="ภาคพิเศษ">ภาคพิเศษ</option>
+              </select>
               <select id="positionFilter" onchange="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3">
                 <option value="">ทุกตำแหน่ง</option>
                 <option value="Frontend">Frontend</option>
@@ -241,6 +255,7 @@
                     <th class="text-left px-4 py-3 rounded-l-2xl">เวลา</th>
                     <th class="text-left px-4 py-3">รหัส</th>
                     <th class="text-left px-4 py-3">ชื่อ</th>
+                    <th class="text-left px-4 py-3">ประเภทนิสิต</th>
                     <th class="text-left px-4 py-3">ตำแหน่ง</th>
                     <th class="text-left px-4 py-3">สถานะ</th>
                     <th class="text-left px-4 py-3">Repo</th>
@@ -262,8 +277,8 @@
             <p class="text-slate-600 mt-1">รับข้อมูลจากฟอร์มแล้ว append ลง Google Sheets</p>
           </div>
           <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
-            <p class="font-semibold">GET / อ่านข้อมูลสำหรับ Dashboard</p>
-            <p class="text-slate-600 mt-1">ส่งข้อมูล JSON กลับมาเพื่อสรุป KPI และรายการส่งงาน</p>
+            <p class="font-semibold">GET / อ่านข้อมูลสำหรับ Dashboard และค้นหานิสิต</p>
+            <p class="text-slate-600 mt-1">รองรับทั้ง action=list และ action=student เพื่อดึงข้อมูลแบบเรียลไทม์</p>
           </div>
         </div>
       </section>
@@ -271,42 +286,15 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwwSTD2Hi_SiLhDEPPz3X-B3cPVGHO2E_NwbBtc00ibHv21tk8F13iElNVRS7kY-bw/exec';
+    const REFRESH_INTERVAL_MS = 5000;
     const repoMap = {
       Frontend: 'git clone https://github.com/suriyapi/frontend_developer_test.git',
       Backend: 'git clone https://github.com/suriyapi/backend_developer_test.git',
       'Full Stack': 'git clone https://github.com/suriyapi/full_stack_developer_test.git'
     };
 
-    let submissions = [
-      {
-        timestamp: '2026-03-26 12:38:37',
-        studentId: '6612345678',
-        fullName: 'สมชาย ใจดี',
-        position: 'Frontend',
-        status: 'ส่งแล้ว',
-        repoLink: 'https://github.com/example/frontend-test',
-        demoLink: 'https://example-demo.com'
-      },
-      {
-        timestamp: '2026-03-26 12:31:50',
-        studentId: '6612345679',
-        fullName: 'กมลชนก ดีงาม',
-        position: 'Backend',
-        status: 'รอตรวจ',
-        repoLink: 'https://github.com/example/backend-test',
-        demoLink: ''
-      },
-      {
-        timestamp: '2026-03-26 12:29:48',
-        studentId: '6612345680',
-        fullName: 'พัชราภรณ์ แสนดี',
-        position: 'Full Stack',
-        status: 'ยังไม่ส่ง',
-        repoLink: 'https://github.com/example/fullstack-test',
-        demoLink: ''
-      }
-    ];
+    let submissions = [];
 
     function updateClock() {
       const now = new Date();
@@ -346,7 +334,7 @@
 
     function updateSummary() {
       const total = submissions.length;
-      const submitted = submissions.filter((item) => item.status === 'ส่งแล้ว' || item.status === 'รอตรวจ').length;
+      const submitted = submissions.filter((item) => ['ส่งแล้ว', 'รอตรวจ', 'ผ่าน'].includes(item.status)).length;
       const pending = total - submitted;
       const rate = total ? Math.round((submitted / total) * 100) : 0;
 
@@ -356,38 +344,6 @@
       document.getElementById('progressRate').textContent = `${rate}%`;
     }
 
-    function renderDashboardTable() {
-      const keyword = document.getElementById('searchInput').value.toLowerCase();
-      const position = document.getElementById('positionFilter').value;
-      const status = document.getElementById('statusFilter').value;
-      const tbody = document.getElementById('submissionTable');
-
-      const filtered = submissions.filter((item) => {
-        const matchKeyword = `${item.studentId} ${item.fullName}`.toLowerCase().includes(keyword);
-        const matchPosition = !position || item.position === position;
-        const matchStatus = !status || item.status === status;
-        return matchKeyword && matchPosition && matchStatus;
-      });
-
-      tbody.innerHTML = filtered.map((item) => `
-        <tr class="bg-white">
-          <td class="px-4 py-3">${item.timestamp}</td>
-          <td class="px-4 py-3">${item.studentId}</td>
-          <td class="px-4 py-3">${item.fullName}</td>
-          <td class="px-4 py-3">${item.position}</td>
-          <td class="px-4 py-3">${renderStatusBadge(item.status)}</td>
-          <td class="px-4 py-3">${item.repoLink ? `<a class="text-green-700 underline break-all" href="${item.repoLink}" target="_blank">Repository</a>` : '-'}</td>
-          <td class="px-4 py-3">${item.demoLink ? `<a class="text-green-700 underline break-all" href="${item.demoLink}" target="_blank">Demo</a>` : '-'}</td>
-        </tr>
-      `).join('');
-
-      if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-500">ไม่พบข้อมูล</td></tr>';
-      }
-
-      updateSummary();
-    }
-
     function renderStatusBadge(status) {
       if (status === 'ส่งแล้ว') {
         return '<span class="rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold">ส่งแล้ว</span>';
@@ -395,7 +351,84 @@
       if (status === 'รอตรวจ') {
         return '<span class="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">รอตรวจ</span>';
       }
+      if (status === 'ผ่าน') {
+        return '<span class="rounded-full bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold">ผ่าน</span>';
+      }
+      if (status === 'ไม่ผ่าน') {
+        return '<span class="rounded-full bg-red-100 text-red-700 px-3 py-1 text-xs font-semibold">ไม่ผ่าน</span>';
+      }
       return '<span class="rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold">ยังไม่ส่ง</span>';
+    }
+
+    function renderDashboardTable() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase();
+      const studyType = document.getElementById('studyTypeFilter').value;
+      const position = document.getElementById('positionFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const tbody = document.getElementById('submissionTable');
+
+      const filtered = submissions.filter((item) => {
+        const matchKeyword = `${item.studentId || ''} ${item.fullName || ''}`.toLowerCase().includes(keyword);
+        const matchStudyType = !studyType || item.studyType === studyType;
+        const matchPosition = !position || item.position === position;
+        const matchStatus = !status || item.status === status;
+        return matchKeyword && matchStudyType && matchPosition && matchStatus;
+      });
+
+      tbody.innerHTML = filtered.map((item) => `
+        <tr class="bg-white">
+          <td class="px-4 py-3">${item.timestamp || ''}</td>
+          <td class="px-4 py-3">${item.studentId || ''}</td>
+          <td class="px-4 py-3">${item.fullName || ''}</td>
+          <td class="px-4 py-3">${item.studyType || '-'}</td>
+          <td class="px-4 py-3">${item.position || ''}</td>
+          <td class="px-4 py-3">${renderStatusBadge(item.status || '')}</td>
+          <td class="px-4 py-3">${item.repoLink ? `<a class="text-green-700 underline break-all" href="${item.repoLink}" target="_blank">Repository</a>` : '-'}</td>
+          <td class="px-4 py-3">${item.demoLink ? `<a class="text-green-700 underline break-all" href="${item.demoLink}" target="_blank">Demo</a>` : '-'}</td>
+        </tr>
+      `).join('');
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-6 text-center text-slate-500">ไม่พบข้อมูล</td></tr>';
+      }
+
+      updateSummary();
+    }
+
+    async function lookupStudentById(studentId) {
+      const nameInput = document.querySelector('input[name="fullName"]');
+      const studyTypeInput = document.querySelector('input[name="studyType"]');
+      const statusEl = document.getElementById('studentLookupStatus');
+
+      if (!studentId) {
+        nameInput.value = '';
+        studyTypeInput.value = '';
+        statusEl.textContent = '';
+        return;
+      }
+
+      statusEl.textContent = 'กำลังค้นหาข้อมูลนิสิต...';
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=student&studentId=${encodeURIComponent(studentId)}&_=${Date.now()}`);
+        if (!response.ok) throw new Error('ค้นหาข้อมูลนิสิตไม่สำเร็จ');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          nameInput.value = result.data.fullName || '';
+          studyTypeInput.value = result.data.studyType || '';
+          statusEl.textContent = 'พบข้อมูลนิสิตแล้ว';
+        } else {
+          nameInput.value = '';
+          studyTypeInput.value = '';
+          statusEl.textContent = 'ไม่พบรหัสนิสิตนี้';
+        }
+      } catch (error) {
+        nameInput.value = '';
+        studyTypeInput.value = '';
+        statusEl.textContent = 'ค้นหาข้อมูลไม่สำเร็จ';
+        console.error(error);
+      }
     }
 
     async function loadSubmissions() {
@@ -403,18 +436,21 @@
       statusEl.textContent = 'กำลังโหลดข้อมูล...';
 
       try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=list`);
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=list&_=${Date.now()}`);
         if (!response.ok) throw new Error('โหลดข้อมูลไม่สำเร็จ');
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          submissions = data;
-        } else if (Array.isArray(data.data)) {
-          submissions = data.data;
+        const result = await response.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          submissions = result.data;
+          renderDashboardTable();
+          statusEl.textContent = `อัปเดตล่าสุด ${new Date().toLocaleString('th-TH')} · รีเฟรชทุก ${REFRESH_INTERVAL_MS / 1000} วินาที`;
+        } else {
+          submissions = [];
+          renderDashboardTable();
+          statusEl.textContent = 'ไม่สามารถอ่านข้อมูลได้';
         }
-        statusEl.textContent = `อัปเดตล่าสุด ${new Date().toLocaleString('th-TH')}`;
-        renderDashboardTable();
       } catch (error) {
-        statusEl.textContent = 'ใช้ข้อมูลตัวอย่างอยู่ เนื่องจากยังไม่เชื่อม Apps Script';
+        statusEl.textContent = 'ใช้ข้อมูลตัวอย่างอยู่ หรือโหลดข้อมูลไม่สำเร็จ';
         renderDashboardTable();
         console.error(error);
       }
@@ -425,30 +461,60 @@
       document.getElementById('repoUrl').innerText = repoMap[selected] || 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
     });
 
+    document.querySelector('input[name="studentId"]').addEventListener('change', (e) => {
+      lookupStudentById(e.target.value.trim());
+    });
+
+    document.querySelector('input[name="studentId"]').addEventListener('blur', (e) => {
+      lookupStudentById(e.target.value.trim());
+    });
+
+    document.querySelector('input[name="studentId"]').addEventListener('input', (e) => {
+      const studentId = e.target.value.trim();
+      if (studentId.length >= 8) {
+        lookupStudentById(studentId);
+      }
+    });
+
     document.getElementById('submissionForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
       const formData = Object.fromEntries(new FormData(form).entries());
       formData.timestamp = new Date().toLocaleString('th-TH');
       formData.status = 'รอตรวจ';
+      formData.score = '';
 
       const status = document.getElementById('formStatus');
       status.textContent = 'กำลังส่งข้อมูล...';
 
+      if (!formData.fullName || !formData.studyType) {
+        status.textContent = 'กรุณากรอกรหัสนิสิตที่ถูกต้องเพื่อดึงข้อมูลอัตโนมัติก่อนส่ง';
+        return;
+      }
+
       try {
         const res = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
           body: JSON.stringify(formData)
         });
 
         if (!res.ok) throw new Error('ส่งข้อมูลไม่สำเร็จ');
-        status.textContent = 'ส่งข้อมูลเรียบร้อยแล้ว';
-        form.reset();
-        document.getElementById('repoUrl').innerText = 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
-        loadSubmissions();
+        const result = await res.json();
+
+        if (result.success) {
+          status.textContent = 'ส่งข้อมูลเรียบร้อยแล้ว';
+          form.reset();
+          document.getElementById('repoUrl').innerText = 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
+          document.getElementById('studentLookupStatus').textContent = '';
+          loadSubmissions();
+        } else {
+          status.textContent = `ส่งข้อมูลไม่สำเร็จ: ${result.message || 'Unknown error'}`;
+        }
       } catch (error) {
-        status.textContent = 'ยังไม่เชื่อม Apps Script หรือเกิดข้อผิดพลาดในการส่งข้อมูล';
+        status.textContent = 'เกิดข้อผิดพลาดในการส่งข้อมูล';
         console.error(error);
       }
     });
@@ -456,6 +522,8 @@
     setInterval(updateClock, 1000);
     updateClock();
     renderDashboardTable();
+    loadSubmissions();
+    setInterval(loadSubmissions, REFRESH_INTERVAL_MS);
   </script>
 </body>
 </html>
