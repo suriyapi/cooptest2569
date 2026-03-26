@@ -35,30 +35,48 @@
               <div>
                 <p class="text-sm text-slate-500">Repository สำหรับการสอบ</p>
                 <h2 class="text-xl font-bold mt-1">เลือกตำแหน่งและคัดลอกคำสั่ง Git Clone</h2>
+                <p class="text-sm text-slate-500 mt-1">เลือกเพียง 1 ตำแหน่งเพื่อแสดงคำสั่งที่ถูกต้อง</p>
               </div>
               <span class="inline-flex items-center rounded-full bg-green-100 text-green-700 px-3 py-1 text-sm font-medium">Active Exam</span>
             </div>
 
-            <div class="mt-5 rounded-2xl bg-green-800 text-white p-5">
-              <p class="text-sm opacity-80">Git Command</p>
-              <div class="mt-2 flex flex-col md:flex-row md:items-center gap-3">
-                <code id="repoUrl" class="block flex-1 overflow-auto text-sm md:text-base font-semibold">เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone</code>
-                <button onclick="copyRepo()" class="bg-white text-green-800 font-semibold px-4 py-2 rounded-xl hover:bg-green-50 transition">คัดลอก</button>
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+              <button type="button" onclick="selectRepo('Frontend')" id="btnFrontend"
+                class="repo-btn rounded-2xl border border-slate-300 px-4 py-4 text-left hover:border-green-700 hover:bg-green-50 transition">
+                <p class="font-semibold">Frontend Developer</p>
+                <p class="text-sm text-slate-500 mt-1">สำหรับผู้สอบสาย Frontend</p>
+              </button>
+
+              <button type="button" onclick="selectRepo('Backend')" id="btnBackend"
+                class="repo-btn rounded-2xl border border-slate-300 px-4 py-4 text-left hover:border-green-700 hover:bg-green-50 transition">
+                <p class="font-semibold">Backend Developer</p>
+                <p class="text-sm text-slate-500 mt-1">สำหรับผู้สอบสาย Backend</p>
+              </button>
+
+              <button type="button" onclick="selectRepo('Full Stack')" id="btnFullStack"
+                class="repo-btn rounded-2xl border border-slate-300 px-4 py-4 text-left hover:border-green-700 hover:bg-green-50 transition">
+                <p class="font-semibold">Full Stack Developer</p>
+                <p class="text-sm text-slate-500 mt-1">สำหรับผู้สอบสาย Full Stack</p>
+              </button>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-4 mt-5">
-              <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50">
-                <p class="text-sm text-slate-500">Frontend Developer</p>
-                <p class="font-bold text-base mt-1 break-all">https://github.com/suriyapi/frontend_developer_test.git</p>
-              </div>
-              <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50">
-                <p class="text-sm text-slate-500">Backend Developer</p>
-                <p class="font-bold text-base mt-1 break-all">https://github.com/suriyapi/backend_developer_test.git</p>
-              </div>
-              <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50">
-                <p class="text-sm text-slate-500">Full Stack Developer</p>
-                <p class="font-bold text-base mt-1 break-all">https://github.com/suriyapi/full_stack_developer_test.git</p>
+            <div class="mt-5 rounded-2xl bg-green-800 text-white p-5">
+              <p class="text-sm opacity-80">Repository ที่เลือก</p>
+              <p id="selectedRepoLabel" class="mt-2 text-base font-semibold">ยังไม่ได้เลือกตำแหน่ง</p>
+              <p id="selectedRepoLink" class="mt-1 text-sm break-all opacity-90">กรุณาเลือกตำแหน่งก่อน</p>
+
+              <div class="mt-4">
+                <p class="text-sm opacity-80">Git Command</p>
+                <div class="mt-2 flex flex-col md:flex-row md:items-center gap-3">
+                  <code id="repoUrl" class="block flex-1 overflow-auto text-sm md:text-base font-semibold">เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone</code>
+                  <button onclick="copyRepo()" class="bg-white text-green-800 font-semibold px-4 py-2 rounded-xl hover:bg-green-50 transition">
+                    คัดลอก
+                  </button>
+                  <a id="openRepoBtn" href="#" target="_blank"
+                    class="bg-green-600 text-white font-semibold px-4 py-2 rounded-xl hover:bg-green-700 transition pointer-events-none opacity-50 text-center">
+                    เปิด GitHub
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -140,54 +158,36 @@
           <div class="xl:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h2 class="text-xl font-bold">ตัวอย่างข้อมูลล่าสุด</h2>
-                <p class="text-sm text-slate-500 mt-1">แสดงตัวอย่างรูปแบบข้อมูลที่บันทึกจาก Google Sheets</p>
+                <h2 class="text-xl font-bold">ข้อมูลล่าสุดจาก Google Sheets</h2>
+                <p class="text-sm text-slate-500 mt-1">แสดงข้อมูลจริงล่าสุดจากระบบส่งงาน</p>
               </div>
-              <button onclick="switchView('dashboard')" class="rounded-2xl bg-green-800 text-white px-4 py-2 font-semibold hover:bg-green-900 transition">ไปหน้า Dashboard</button>
+              <button onclick="loadExamLatestTable()" class="rounded-2xl bg-green-800 text-white px-4 py-2 font-semibold hover:bg-green-900 transition">รีเฟรชข้อมูล</button>
             </div>
-            <div class="mt-5 overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead>
+            <p id="examLatestStatus" class="text-sm text-slate-500 mt-4">กำลังโหลดข้อมูล...</p>
+
+            <div class="mt-5 overflow-x-auto max-h-[520px]">
+              <table class="w-full text-sm table-fixed">
+                <thead class="sticky top-0 z-10">
                   <tr class="bg-green-800 text-white">
-                    <th class="text-left px-4 py-3 rounded-l-2xl">เวลา</th>
-                    <th class="text-left px-4 py-3">รหัส</th>
+                    <th class="text-left px-4 py-3 rounded-l-2xl w-[130px]">เวลา</th>
+                    <th class="text-left px-4 py-3 w-[110px]">รหัส</th>
                     <th class="text-left px-4 py-3">ชื่อ</th>
-                    <th class="text-left px-4 py-3">ประเภทนิสิต</th>
-                    <th class="text-left px-4 py-3">ตำแหน่ง</th>
-                    <th class="text-left px-4 py-3">สถานะ</th>
-                    <th class="text-left px-4 py-3 rounded-r-2xl">คะแนน</th>
+                    <th class="text-left px-4 py-3 w-[120px]">ประเภทนิสิต</th>
+                    <th class="text-left px-4 py-3 w-[110px]">ตำแหน่ง</th>
+                    <th class="text-left px-4 py-3 w-[110px]">สถานะ</th>
+                    <th class="text-left px-4 py-3 rounded-r-2xl w-[80px]">คะแนน</th>
                   </tr>
                 </thead>
-                <tbody id="previewTable" class="divide-y divide-slate-200">
-                  <tr>
-                    <td class="px-4 py-3">12:38:37</td>
-                    <td class="px-4 py-3">6612345678</td>
-                    <td class="px-4 py-3">สมชาย ใจดี</td>
-                    <td class="px-4 py-3">ภาคปกติ</td>
-                    <td class="px-4 py-3">Frontend</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold">ส่งแล้ว</span></td>
-                    <td class="px-4 py-3">85</td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">12:31:50</td>
-                    <td class="px-4 py-3">6612345679</td>
-                    <td class="px-4 py-3">กมลชนก ดีงาม</td>
-                    <td class="px-4 py-3">ภาคพิเศษ</td>
-                    <td class="px-4 py-3">Backend</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">รอตรวจ</span></td>
-                    <td class="px-4 py-3">-</td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">12:29:48</td>
-                    <td class="px-4 py-3">6612345680</td>
-                    <td class="px-4 py-3">พัชราภรณ์ แสนดี</td>
-                    <td class="px-4 py-3">ภาคปกติ</td>
-                    <td class="px-4 py-3">Full Stack</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold">ยังไม่ส่ง Demo</span></td>
-                    <td class="px-4 py-3">72</td>
-                  </tr>
-                </tbody>
+                <tbody id="previewTable" class="divide-y divide-slate-200"></tbody>
               </table>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between text-sm text-slate-500">
+              <p id="previewPageInfo">หน้า 1 / 1</p>
+              <div class="flex gap-2">
+                <button id="previewPrevBtn" onclick="changePreviewPage(-1)" class="rounded-xl border border-slate-300 px-3 py-1.5 hover:bg-slate-50 disabled:opacity-40" disabled>ก่อนหน้า</button>
+                <button id="previewNextBtn" onclick="changePreviewPage(1)" class="rounded-xl border border-slate-300 px-3 py-1.5 hover:bg-slate-50 disabled:opacity-40" disabled>ถัดไป</button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,6 +234,8 @@
                 <option value="ส่งแล้ว">ส่งแล้ว</option>
                 <option value="รอตรวจ">รอตรวจ</option>
                 <option value="ยังไม่ส่ง">ยังไม่ส่ง</option>
+                <option value="ผ่าน">ผ่าน</option>
+                <option value="ไม่ผ่าน">ไม่ผ่าน</option>
               </select>
               <button onclick="loadSubmissions()" class="w-full rounded-xl bg-green-800 text-white py-3 font-semibold hover:bg-green-900 transition">รีเฟรชข้อมูล</button>
             </div>
@@ -248,37 +250,31 @@
               <p id="dashboardStatus" class="text-sm text-slate-500">ยังไม่ได้โหลดข้อมูลจริง</p>
             </div>
 
-            <div class="mt-5 overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead>
+            <div class="mt-5 overflow-x-auto max-h-[520px]">
+              <table class="w-full text-sm table-fixed">
+                <thead class="sticky top-0 z-10">
                   <tr class="bg-green-800 text-white">
-                    <th class="text-left px-4 py-3 rounded-l-2xl">เวลา</th>
-                    <th class="text-left px-4 py-3">รหัส</th>
+                    <th class="text-left px-4 py-3 rounded-l-2xl w-[130px]">เวลา</th>
+                    <th class="text-left px-4 py-3 w-[110px]">รหัส</th>
                     <th class="text-left px-4 py-3">ชื่อ</th>
-                    <th class="text-left px-4 py-3">ประเภทนิสิต</th>
-                    <th class="text-left px-4 py-3">ตำแหน่ง</th>
-                    <th class="text-left px-4 py-3">สถานะ</th>
-                    <th class="text-left px-4 py-3">Repo</th>
-                    <th class="text-left px-4 py-3 rounded-r-2xl">Demo</th>
+                    <th class="text-left px-4 py-3 w-[120px]">ประเภทนิสิต</th>
+                    <th class="text-left px-4 py-3 w-[110px]">ตำแหน่ง</th>
+                    <th class="text-left px-4 py-3 w-[110px]">สถานะ</th>
+                    <th class="text-left px-4 py-3 w-[120px]">Repo</th>
+                    <th class="text-left px-4 py-3 rounded-r-2xl w-[110px]">Demo</th>
                   </tr>
                 </thead>
                 <tbody id="submissionTable" class="divide-y divide-slate-200"></tbody>
               </table>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
-        <h2 class="text-xl font-bold">Google Apps Script ที่ต้องเตรียม</h2>
-        <div class="mt-4 grid lg:grid-cols-2 gap-4 text-sm">
-          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
-            <p class="font-semibold">POST / บันทึกการส่งงาน</p>
-            <p class="text-slate-600 mt-1">รับข้อมูลจากฟอร์มแล้ว append ลง Google Sheets</p>
-          </div>
-          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
-            <p class="font-semibold">GET / อ่านข้อมูลสำหรับ Dashboard และค้นหานิสิต</p>
-            <p class="text-slate-600 mt-1">รองรับทั้ง action=list และ action=student เพื่อดึงข้อมูลแบบเรียลไทม์</p>
+            <div class="mt-4 flex items-center justify-between text-sm text-slate-500">
+              <p id="dashboardPageInfo">หน้า 1 / 1</p>
+              <div class="flex gap-2">
+                <button id="dashboardPrevBtn" onclick="changeDashboardPage(-1)" class="rounded-xl border border-slate-300 px-3 py-1.5 hover:bg-slate-50 disabled:opacity-40" disabled>ก่อนหน้า</button>
+                <button id="dashboardNextBtn" onclick="changeDashboardPage(1)" class="rounded-xl border border-slate-300 px-3 py-1.5 hover:bg-slate-50 disabled:opacity-40" disabled>ถัดไป</button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -288,13 +284,29 @@
   <script>
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwwSTD2Hi_SiLhDEPPz3X-B3cPVGHO2E_NwbBtc00ibHv21tk8F13iElNVRS7kY-bw/exec';
     const REFRESH_INTERVAL_MS = 5000;
-    const repoMap = {
-      Frontend: 'git clone https://github.com/suriyapi/frontend_developer_test.git',
-      Backend: 'git clone https://github.com/suriyapi/backend_developer_test.git',
-      'Full Stack': 'git clone https://github.com/suriyapi/full_stack_developer_test.git'
+    const PAGE_SIZE = 10;
+
+    const repoData = {
+      Frontend: {
+        label: 'Frontend Developer',
+        url: 'https://github.com/suriyapi/frontend_developer_test.git',
+        clone: 'git clone https://github.com/suriyapi/frontend_developer_test.git'
+      },
+      Backend: {
+        label: 'Backend Developer',
+        url: 'https://github.com/suriyapi/backend_developer_test.git',
+        clone: 'git clone https://github.com/suriyapi/backend_developer_test.git'
+      },
+      'Full Stack': {
+        label: 'Full Stack Developer',
+        url: 'https://github.com/suriyapi/full_stack_developer_test.git',
+        clone: 'git clone https://github.com/suriyapi/full_stack_developer_test.git'
+      }
     };
 
     let submissions = [];
+    let previewPage = 1;
+    let dashboardPage = 1;
 
     function updateClock() {
       const now = new Date();
@@ -312,6 +324,7 @@
         dashboardView.classList.add('hidden');
         tabExam.className = 'rounded-2xl bg-white text-green-800 font-semibold px-4 py-2';
         tabDashboard.className = 'rounded-2xl bg-white/10 text-white font-semibold px-4 py-2';
+        renderExamLatestTable();
       } else {
         examView.classList.add('hidden');
         dashboardView.classList.remove('hidden');
@@ -321,15 +334,107 @@
       }
     }
 
+    function selectRepo(position) {
+      const repo = repoData[position];
+      if (!repo) return;
+
+      document.getElementById('selectedRepoLabel').textContent = repo.label;
+      document.getElementById('selectedRepoLink').textContent = repo.url;
+      document.getElementById('repoUrl').textContent = repo.clone;
+
+      const openBtn = document.getElementById('openRepoBtn');
+      openBtn.href = repo.url;
+      openBtn.classList.remove('pointer-events-none', 'opacity-50');
+
+      document.querySelectorAll('.repo-btn').forEach((btn) => {
+        btn.classList.remove('border-green-700', 'bg-green-50', 'ring-2', 'ring-green-200');
+      });
+
+      const idMap = {
+        Frontend: 'btnFrontend',
+        Backend: 'btnBackend',
+        'Full Stack': 'btnFullStack'
+      };
+
+      document.getElementById(idMap[position]).classList.add(
+        'border-green-700',
+        'bg-green-50',
+        'ring-2',
+        'ring-green-200'
+      );
+
+      const positionSelect = document.querySelector('select[name="position"]');
+      if (positionSelect) {
+        positionSelect.value = position;
+      }
+    }
+
     function copyRepo() {
-      const text = document.getElementById('repoUrl').innerText;
+      const text = document.getElementById('repoUrl').textContent.trim();
       if (!text || text.includes('เลือกตำแหน่ง')) {
         alert('กรุณาเลือกตำแหน่งก่อน');
         return;
       }
+
       navigator.clipboard.writeText(text).then(() => {
         alert('คัดลอกคำสั่ง git clone แล้ว');
       });
+    }
+
+    function formatDateTime(value) {
+      if (!value) return '-';
+
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime())) {
+        return date.toLocaleString('th-TH', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      return String(value).replace('T', ' ').replace('.000Z', '');
+    }
+
+    function sortByLatest(items) {
+      return [...items].sort((a, b) => {
+        const timeA = new Date(a.timestamp || 0).getTime();
+        const timeB = new Date(b.timestamp || 0).getTime();
+        return timeB - timeA;
+      });
+    }
+
+    function paginate(items, page) {
+      const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+      const safePage = Math.min(Math.max(1, page), totalPages);
+      const start = (safePage - 1) * PAGE_SIZE;
+      return {
+        page: safePage,
+        totalPages,
+        items: items.slice(start, start + PAGE_SIZE)
+      };
+    }
+
+    function updatePaginationControls(prefix, page, totalPages) {
+      const pageInfo = document.getElementById(`${prefix}PageInfo`);
+      const prevBtn = document.getElementById(`${prefix}PrevBtn`);
+      const nextBtn = document.getElementById(`${prefix}NextBtn`);
+
+      if (pageInfo) pageInfo.textContent = `หน้า ${page} / ${totalPages}`;
+      if (prevBtn) prevBtn.disabled = page <= 1;
+      if (nextBtn) nextBtn.disabled = page >= totalPages;
+    }
+
+    function changePreviewPage(step) {
+      previewPage += step;
+      renderExamLatestTable();
+    }
+
+    function changeDashboardPage(step) {
+      dashboardPage += step;
+      renderDashboardTable();
     }
 
     function updateSummary() {
@@ -360,6 +465,32 @@
       return '<span class="rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold">ยังไม่ส่ง</span>';
     }
 
+    function renderExamLatestTable() {
+      const tbody = document.getElementById('previewTable');
+      const sorted = sortByLatest(submissions);
+      const paged = paginate(sorted, previewPage);
+      previewPage = paged.page;
+      const items = paged.items;
+
+      tbody.innerHTML = items.map((item, index) => `
+        <tr class="${previewPage === 1 && index === 0 ? 'bg-green-50' : 'bg-white'}">
+          <td class="px-4 py-3 text-xs text-slate-600">${formatDateTime(item.timestamp)}</td>
+          <td class="px-4 py-3">${item.studentId || ''}</td>
+          <td class="px-4 py-3 truncate">${item.fullName || ''}</td>
+          <td class="px-4 py-3">${item.studyType || '-'}</td>
+          <td class="px-4 py-3">${item.position || ''}</td>
+          <td class="px-4 py-3">${renderStatusBadge(item.status || '')}</td>
+          <td class="px-4 py-3">${item.score || '-'}</td>
+        </tr>
+      `).join('');
+
+      if (!items.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-500">ยังไม่มีข้อมูลใน Google Sheets</td></tr>';
+      }
+
+      updatePaginationControls('preview', paged.page, paged.totalPages);
+    }
+
     function renderDashboardTable() {
       const keyword = document.getElementById('searchInput').value.toLowerCase();
       const studyType = document.getElementById('studyTypeFilter').value;
@@ -375,11 +506,16 @@
         return matchKeyword && matchStudyType && matchPosition && matchStatus;
       });
 
-      tbody.innerHTML = filtered.map((item) => `
-        <tr class="bg-white">
-          <td class="px-4 py-3">${item.timestamp || ''}</td>
+      const sorted = sortByLatest(filtered);
+      const paged = paginate(sorted, dashboardPage);
+      dashboardPage = paged.page;
+      const items = paged.items;
+
+      tbody.innerHTML = items.map((item, index) => `
+        <tr class="${dashboardPage === 1 && index === 0 ? 'bg-green-50' : 'bg-white'}">
+          <td class="px-4 py-3 text-xs text-slate-600">${formatDateTime(item.timestamp)}</td>
           <td class="px-4 py-3">${item.studentId || ''}</td>
-          <td class="px-4 py-3">${item.fullName || ''}</td>
+          <td class="px-4 py-3 truncate">${item.fullName || ''}</td>
           <td class="px-4 py-3">${item.studyType || '-'}</td>
           <td class="px-4 py-3">${item.position || ''}</td>
           <td class="px-4 py-3">${renderStatusBadge(item.status || '')}</td>
@@ -388,10 +524,11 @@
         </tr>
       `).join('');
 
-      if (!filtered.length) {
+      if (!items.length) {
         tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-6 text-center text-slate-500">ไม่พบข้อมูล</td></tr>';
       }
 
+      updatePaginationControls('dashboard', paged.page, paged.totalPages);
       updateSummary();
     }
 
@@ -431,6 +568,33 @@
       }
     }
 
+    async function loadExamLatestTable() {
+      const statusEl = document.getElementById('examLatestStatus');
+      statusEl.textContent = 'กำลังโหลดข้อมูล...';
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=list&_=${Date.now()}`);
+        if (!response.ok) throw new Error('โหลดข้อมูลไม่สำเร็จ');
+        const result = await response.json();
+
+        if (result.success && Array.isArray(result.data)) {
+          submissions = sortByLatest(result.data);
+          previewPage = 1;
+          dashboardPage = 1;
+          renderExamLatestTable();
+          renderDashboardTable();
+          statusEl.textContent = `อัปเดตล่าสุด ${new Date().toLocaleString('th-TH')}`;
+        } else {
+          renderExamLatestTable();
+          statusEl.textContent = 'ไม่สามารถอ่านข้อมูลได้';
+        }
+      } catch (error) {
+        renderExamLatestTable();
+        statusEl.textContent = 'โหลดข้อมูลไม่สำเร็จ';
+        console.error(error);
+      }
+    }
+
     async function loadSubmissions() {
       const statusEl = document.getElementById('dashboardStatus');
       statusEl.textContent = 'กำลังโหลดข้อมูล...';
@@ -441,24 +605,38 @@
         const result = await response.json();
 
         if (result.success && Array.isArray(result.data)) {
-          submissions = result.data;
+          submissions = sortByLatest(result.data);
+          previewPage = 1;
+          dashboardPage = 1;
           renderDashboardTable();
-          statusEl.textContent = `อัปเดตล่าสุด ${new Date().toLocaleString('th-TH')} · รีเฟรชทุก ${REFRESH_INTERVAL_MS / 1000} วินาที`;
+          renderExamLatestTable();
+
+          const nowText = new Date().toLocaleString('th-TH');
+          statusEl.textContent = `อัปเดตล่าสุด ${nowText} · รีเฟรชทุก ${REFRESH_INTERVAL_MS / 1000} วินาที`;
+
+          const examStatusEl = document.getElementById('examLatestStatus');
+          if (examStatusEl) {
+            examStatusEl.textContent = `อัปเดตล่าสุด ${nowText}`;
+          }
         } else {
           submissions = [];
           renderDashboardTable();
+          renderExamLatestTable();
           statusEl.textContent = 'ไม่สามารถอ่านข้อมูลได้';
         }
       } catch (error) {
         statusEl.textContent = 'ใช้ข้อมูลตัวอย่างอยู่ หรือโหลดข้อมูลไม่สำเร็จ';
         renderDashboardTable();
+        renderExamLatestTable();
         console.error(error);
       }
     }
 
     document.querySelector('select[name="position"]').addEventListener('change', (e) => {
       const selected = e.target.value;
-      document.getElementById('repoUrl').innerText = repoMap[selected] || 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
+      if (selected) {
+        selectRepo(selected);
+      }
     });
 
     document.querySelector('input[name="studentId"]').addEventListener('change', (e) => {
@@ -480,7 +658,7 @@
       e.preventDefault();
       const form = e.target;
       const formData = Object.fromEntries(new FormData(form).entries());
-      formData.timestamp = new Date().toLocaleString('th-TH');
+      formData.timestamp = new Date().toISOString();
       formData.status = 'รอตรวจ';
       formData.score = '';
 
@@ -507,8 +685,20 @@
         if (result.success) {
           status.textContent = 'ส่งข้อมูลเรียบร้อยแล้ว';
           form.reset();
-          document.getElementById('repoUrl').innerText = 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
+
+          document.getElementById('repoUrl').textContent = 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
+          document.getElementById('selectedRepoLabel').textContent = 'ยังไม่ได้เลือกตำแหน่ง';
+          document.getElementById('selectedRepoLink').textContent = 'กรุณาเลือกตำแหน่งก่อน';
           document.getElementById('studentLookupStatus').textContent = '';
+
+          document.querySelectorAll('.repo-btn').forEach((btn) => {
+            btn.classList.remove('border-green-700', 'bg-green-50', 'ring-2', 'ring-green-200');
+          });
+
+          const openBtn = document.getElementById('openRepoBtn');
+          openBtn.href = '#';
+          openBtn.classList.add('pointer-events-none', 'opacity-50');
+
           loadSubmissions();
         } else {
           status.textContent = `ส่งข้อมูลไม่สำเร็จ: ${result.message || 'Unknown error'}`;
@@ -522,6 +712,7 @@
     setInterval(updateClock, 1000);
     updateClock();
     renderDashboardTable();
+    renderExamLatestTable();
     loadSubmissions();
     setInterval(loadSubmissions, REFRESH_INTERVAL_MS);
   </script>
