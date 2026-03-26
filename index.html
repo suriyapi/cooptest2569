@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pre-Coop Exam Submission System</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="bg-slate-100 text-slate-800">
   <div class="min-h-screen">
@@ -150,7 +151,7 @@
                 <textarea name="note" rows="3" class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-700" placeholder="Framework ที่ใช้, วิธีรัน, ข้อมูลเพิ่มเติม"></textarea>
               </div>
 
-              <button type="submit" class="w-full rounded-xl bg-green-800 text-white font-semibold py-3 hover:bg-green-900 transition">ส่งข้อมูลการส่งงาน</button>
+              <button id="submitButton" type="submit" class="w-full rounded-xl bg-green-800 text-white font-semibold py-3 hover:bg-green-900 transition">ส่งข้อมูลการส่งงาน</button>
               <p id="formStatus" class="text-sm text-slate-500"></p>
             </form>
           </div>
@@ -166,16 +167,16 @@
             <p id="examLatestStatus" class="text-sm text-slate-500 mt-4">กำลังโหลดข้อมูล...</p>
 
             <div class="mt-5 overflow-x-auto max-h-[520px]">
-              <table class="w-full text-sm table-fixed">
+              <table class="w-full text-sm latest-table">
                 <thead class="sticky top-0 z-10">
                   <tr class="bg-green-800 text-white">
-                    <th class="text-left px-4 py-3 rounded-l-2xl w-[130px]">เวลา</th>
-                    <th class="text-left px-4 py-3 w-[110px]">รหัส</th>
+                    <th class="text-left px-4 py-3 rounded-l-2xl w-[150px]">เวลา</th>
+                    <th class="text-left px-4 py-3 w-[120px]">รหัส</th>
                     <th class="text-left px-4 py-3">ชื่อ</th>
-                    <th class="text-left px-4 py-3 w-[120px]">ประเภทนิสิต</th>
-                    <th class="text-left px-4 py-3 w-[110px]">ตำแหน่ง</th>
-                    <th class="text-left px-4 py-3 w-[110px]">สถานะ</th>
-                    <th class="text-left px-4 py-3 rounded-r-2xl w-[80px]">คะแนน</th>
+                    <th class="text-left px-4 py-3 w-[140px]">ประเภทนิสิต</th>
+                    <th class="text-left px-4 py-3 w-[130px]">ตำแหน่ง</th>
+                    <th class="text-left px-4 py-3 w-[140px]">สถานะ</th>
+                    <th class="text-left px-4 py-3 rounded-r-2xl w-[90px]">คะแนน</th>
                   </tr>
                 </thead>
                 <tbody id="previewTable" class="divide-y divide-slate-200"></tbody>
@@ -194,7 +195,12 @@
       </section>
 
       <section id="dashboardView" class="hidden space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-4">
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5">
+            <p class="text-sm text-slate-500">เวลาคงเหลือก่อนปิดรับ</p>
+            <p id="countdownText" class="text-2xl font-bold mt-2 text-rose-600">--:--:--</p>
+            <p id="countdownSubtext" class="text-sm text-slate-500 mt-1">กำลังคำนวณเวลา</p>
+          </div>
           <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5">
             <p class="text-sm text-slate-500">ผู้มีสิทธิ์สอบทั้งหมด</p>
             <p id="totalCount" class="text-3xl font-bold mt-2">0</p>
@@ -213,55 +219,121 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          <div class="xl:col-span-1 bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
-            <h2 class="text-xl font-bold">ตัวกรองข้อมูล</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 summary-card">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Frontend</p>
+                <p id="frontendSummaryCount" class="text-3xl font-bold mt-2 text-sky-700">0</p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold">FE</div>
+            </div>
+            <div class="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div id="frontendSummaryBar" class="h-full bg-sky-500 progress-fill" style="width: 0%"></div>
+            </div>
+            <p id="frontendSummarySubtext" class="text-sm text-slate-500 mt-2">ส่งแล้ว 0 คน • 0%</p>
+          </div>
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 summary-card">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Backend</p>
+                <p id="backendSummaryCount" class="text-3xl font-bold mt-2 text-violet-700">0</p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold">BE</div>
+            </div>
+            <div class="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div id="backendSummaryBar" class="h-full bg-violet-500 progress-fill" style="width: 0%"></div>
+            </div>
+            <p id="backendSummarySubtext" class="text-sm text-slate-500 mt-2">ส่งแล้ว 0 คน • 0%</p>
+          </div>
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 summary-card">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Full Stack</p>
+                <p id="fullstackSummaryCount" class="text-3xl font-bold mt-2 text-emerald-700">0</p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">FS</div>
+            </div>
+            <div class="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div id="fullstackSummaryBar" class="h-full bg-emerald-500 progress-fill" style="width: 0%"></div>
+            </div>
+            <p id="fullstackSummarySubtext" class="text-sm text-slate-500 mt-2">ส่งแล้ว 0 คน • 0%</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6">
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <h2 class="text-xl font-bold">ตัวกรองข้อมูล</h2>
+              <button id="clearFiltersBtn" class="text-sm text-green-700 font-semibold hover:underline">ล้างตัวกรอง</button>
+            </div>
+
             <div class="mt-4 space-y-4">
-              <input id="searchInput" oninput="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3" placeholder="ค้นหาชื่อ / รหัส" />
-              <select id="studyTypeFilter" onchange="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3">
-                <option value="">ทุกประเภทนิสิต</option>
-                <option value="ภาคปกติ">ภาคปกติ</option>
-                <option value="ภาคพิเศษ">ภาคพิเศษ</option>
-              </select>
-              <select id="positionFilter" onchange="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3">
-                <option value="">ทุกตำแหน่ง</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Full Stack">Full Stack</option>
-              </select>
-              <select id="statusFilter" onchange="renderDashboardTable()" class="w-full rounded-xl border border-slate-300 px-4 py-3">
-                <option value="">ทุกสถานะ</option>
-                <option value="ส่งแล้ว">ส่งแล้ว</option>
-                <option value="รอตรวจ">รอตรวจ</option>
-                <option value="ยังไม่ส่ง">ยังไม่ส่ง</option>
-                <option value="ผ่าน">ผ่าน</option>
-                <option value="ไม่ผ่าน">ไม่ผ่าน</option>
-              </select>
+              <div>
+                <label class="text-sm font-medium">ค้นหา</label>
+                <input id="searchInput" class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3" placeholder="ค้นหาชื่อ หรือรหัสนิสิต" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
+                <div>
+                  <label class="text-sm font-medium">ประเภทนิสิต</label>
+                  <select id="studyTypeFilter" class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3">
+                    <option value="">ทั้งหมด</option>
+                    <option value="ภาคปกติ">ภาคปกติ</option>
+                    <option value="ภาคพิเศษ">ภาคพิเศษ</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-sm font-medium">ตำแหน่ง</label>
+                  <select id="positionFilter" class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3">
+                    <option value="">ทั้งหมด</option>
+                    <option value="Frontend">Frontend</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Full Stack">Full Stack</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-sm font-medium">สถานะ</label>
+                <div id="statusChips" class="mt-2 flex flex-wrap gap-2">
+                  <button type="button" class="filter-chip active" data-status="">ทั้งหมด</button>
+                  <button type="button" class="filter-chip" data-status="ส่งตรงเวลา">ส่งตรงเวลา</button>
+                  <button type="button" class="filter-chip" data-status="ส่งล่าช้า">ส่งล่าช้า</button>
+                  <button type="button" class="filter-chip" data-status="รอตรวจ">รอตรวจ</button>
+                  <button type="button" class="filter-chip" data-status="ผ่าน">ผ่าน</button>
+                  <button type="button" class="filter-chip" data-status="ไม่ผ่าน">ไม่ผ่าน</button>
+                </div>
+              </div>
+
               <button onclick="loadSubmissions()" class="w-full rounded-xl bg-green-800 text-white py-3 font-semibold hover:bg-green-900 transition">รีเฟรชข้อมูล</button>
             </div>
           </div>
 
-          <div class="xl:col-span-3 bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
                 <h2 class="text-xl font-bold">Dashboard การส่งงาน</h2>
                 <p class="text-sm text-slate-500 mt-1">ข้อมูลจะถูกดึงจาก Google Sheets ผ่าน Apps Script</p>
               </div>
-              <p id="dashboardStatus" class="text-sm text-slate-500">ยังไม่ได้โหลดข้อมูลจริง</p>
+              <div class="text-sm text-slate-500 flex flex-wrap items-center gap-3">
+                <span id="dashboardStatus">ยังไม่ได้โหลดข้อมูลจริง</span>
+                <span id="dashboardResultCount" class="rounded-full bg-slate-100 px-3 py-1">0 รายการ</span>
+              </div>
             </div>
 
             <div class="mt-5 overflow-x-auto max-h-[520px]">
-              <table class="w-full text-sm table-fixed">
+              <table class="w-full text-sm dashboard-table">
                 <thead class="sticky top-0 z-10">
                   <tr class="bg-green-800 text-white">
-                    <th class="text-left px-4 py-3 rounded-l-2xl w-[130px]">เวลา</th>
-                    <th class="text-left px-4 py-3 w-[110px]">รหัส</th>
-                    <th class="text-left px-4 py-3">ชื่อ</th>
-                    <th class="text-left px-4 py-3 w-[120px]">ประเภทนิสิต</th>
-                    <th class="text-left px-4 py-3 w-[110px]">ตำแหน่ง</th>
-                    <th class="text-left px-4 py-3 w-[110px]">สถานะ</th>
-                    <th class="text-left px-4 py-3 w-[120px]">Repo</th>
-                    <th class="text-left px-4 py-3 rounded-r-2xl w-[110px]">Demo</th>
+                    <th class="text-left px-4 py-3 rounded-l-2xl col-time">เวลา</th>
+                    <th class="text-left px-4 py-3 col-id">รหัส</th>
+                    <th class="text-left px-4 py-3 col-name">ชื่อ</th>
+                    <th class="text-left px-4 py-3 col-study">ประเภทนิสิต</th>
+                    <th class="text-left px-4 py-3 col-position">ตำแหน่ง</th>
+                    <th class="text-left px-4 py-3 col-status">สถานะ</th>
+                    <th class="text-left px-4 py-3 col-link">Repo</th>
+                    <th class="text-left px-4 py-3 rounded-r-2xl col-link">Demo</th>
                   </tr>
                 </thead>
                 <tbody id="submissionTable" class="divide-y divide-slate-200"></tbody>
@@ -281,440 +353,6 @@
     </main>
   </div>
 
-  <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwwSTD2Hi_SiLhDEPPz3X-B3cPVGHO2E_NwbBtc00ibHv21tk8F13iElNVRS7kY-bw/exec';
-    const REFRESH_INTERVAL_MS = 5000;
-    const PAGE_SIZE = 10;
-
-    const repoData = {
-      Frontend: {
-        label: 'Frontend Developer',
-        url: 'https://github.com/suriyapi/frontend_developer_test.git',
-        clone: 'git clone https://github.com/suriyapi/frontend_developer_test.git'
-      },
-      Backend: {
-        label: 'Backend Developer',
-        url: 'https://github.com/suriyapi/backend_developer_test.git',
-        clone: 'git clone https://github.com/suriyapi/backend_developer_test.git'
-      },
-      'Full Stack': {
-        label: 'Full Stack Developer',
-        url: 'https://github.com/suriyapi/full_stack_developer_test.git',
-        clone: 'git clone https://github.com/suriyapi/full_stack_developer_test.git'
-      }
-    };
-
-    let submissions = [];
-    let previewPage = 1;
-    let dashboardPage = 1;
-
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').textContent = now.toLocaleString('th-TH');
-    }
-
-    function switchView(view) {
-      const examView = document.getElementById('examView');
-      const dashboardView = document.getElementById('dashboardView');
-      const tabExam = document.getElementById('tabExam');
-      const tabDashboard = document.getElementById('tabDashboard');
-
-      if (view === 'exam') {
-        examView.classList.remove('hidden');
-        dashboardView.classList.add('hidden');
-        tabExam.className = 'rounded-2xl bg-white text-green-800 font-semibold px-4 py-2';
-        tabDashboard.className = 'rounded-2xl bg-white/10 text-white font-semibold px-4 py-2';
-        renderExamLatestTable();
-      } else {
-        examView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
-        tabExam.className = 'rounded-2xl bg-white/10 text-white font-semibold px-4 py-2';
-        tabDashboard.className = 'rounded-2xl bg-white text-green-800 font-semibold px-4 py-2';
-        renderDashboardTable();
-      }
-    }
-
-    function selectRepo(position) {
-      const repo = repoData[position];
-      if (!repo) return;
-
-      document.getElementById('selectedRepoLabel').textContent = repo.label;
-      document.getElementById('selectedRepoLink').textContent = repo.url;
-      document.getElementById('repoUrl').textContent = repo.clone;
-
-      const openBtn = document.getElementById('openRepoBtn');
-      openBtn.href = repo.url;
-      openBtn.classList.remove('pointer-events-none', 'opacity-50');
-
-      document.querySelectorAll('.repo-btn').forEach((btn) => {
-        btn.classList.remove('border-green-700', 'bg-green-50', 'ring-2', 'ring-green-200');
-      });
-
-      const idMap = {
-        Frontend: 'btnFrontend',
-        Backend: 'btnBackend',
-        'Full Stack': 'btnFullStack'
-      };
-
-      document.getElementById(idMap[position]).classList.add(
-        'border-green-700',
-        'bg-green-50',
-        'ring-2',
-        'ring-green-200'
-      );
-
-      const positionSelect = document.querySelector('select[name="position"]');
-      if (positionSelect) {
-        positionSelect.value = position;
-      }
-    }
-
-    function copyRepo() {
-      const text = document.getElementById('repoUrl').textContent.trim();
-      if (!text || text.includes('เลือกตำแหน่ง')) {
-        alert('กรุณาเลือกตำแหน่งก่อน');
-        return;
-      }
-
-      navigator.clipboard.writeText(text).then(() => {
-        alert('คัดลอกคำสั่ง git clone แล้ว');
-      });
-    }
-
-    function formatDateTime(value) {
-      if (!value) return '-';
-
-      const date = new Date(value);
-      if (!Number.isNaN(date.getTime())) {
-        return date.toLocaleString('th-TH', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      }
-
-      return String(value).replace('T', ' ').replace('.000Z', '');
-    }
-
-    function sortByLatest(items) {
-      return [...items].sort((a, b) => {
-        const timeA = new Date(a.timestamp || 0).getTime();
-        const timeB = new Date(b.timestamp || 0).getTime();
-        return timeB - timeA;
-      });
-    }
-
-    function paginate(items, page) {
-      const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
-      const safePage = Math.min(Math.max(1, page), totalPages);
-      const start = (safePage - 1) * PAGE_SIZE;
-      return {
-        page: safePage,
-        totalPages,
-        items: items.slice(start, start + PAGE_SIZE)
-      };
-    }
-
-    function updatePaginationControls(prefix, page, totalPages) {
-      const pageInfo = document.getElementById(`${prefix}PageInfo`);
-      const prevBtn = document.getElementById(`${prefix}PrevBtn`);
-      const nextBtn = document.getElementById(`${prefix}NextBtn`);
-
-      if (pageInfo) pageInfo.textContent = `หน้า ${page} / ${totalPages}`;
-      if (prevBtn) prevBtn.disabled = page <= 1;
-      if (nextBtn) nextBtn.disabled = page >= totalPages;
-    }
-
-    function changePreviewPage(step) {
-      previewPage += step;
-      renderExamLatestTable();
-    }
-
-    function changeDashboardPage(step) {
-      dashboardPage += step;
-      renderDashboardTable();
-    }
-
-    function updateSummary() {
-      const total = submissions.length;
-      const submitted = submissions.filter((item) => ['ส่งแล้ว', 'รอตรวจ', 'ผ่าน'].includes(item.status)).length;
-      const pending = total - submitted;
-      const rate = total ? Math.round((submitted / total) * 100) : 0;
-
-      document.getElementById('totalCount').textContent = total;
-      document.getElementById('submittedCount').textContent = submitted;
-      document.getElementById('pendingCount').textContent = pending;
-      document.getElementById('progressRate').textContent = `${rate}%`;
-    }
-
-    function renderStatusBadge(status) {
-      if (status === 'ส่งแล้ว') {
-        return '<span class="rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold">ส่งแล้ว</span>';
-      }
-      if (status === 'รอตรวจ') {
-        return '<span class="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">รอตรวจ</span>';
-      }
-      if (status === 'ผ่าน') {
-        return '<span class="rounded-full bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold">ผ่าน</span>';
-      }
-      if (status === 'ไม่ผ่าน') {
-        return '<span class="rounded-full bg-red-100 text-red-700 px-3 py-1 text-xs font-semibold">ไม่ผ่าน</span>';
-      }
-      return '<span class="rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold">ยังไม่ส่ง</span>';
-    }
-
-    function renderExamLatestTable() {
-      const tbody = document.getElementById('previewTable');
-      const sorted = sortByLatest(submissions);
-      const paged = paginate(sorted, previewPage);
-      previewPage = paged.page;
-      const items = paged.items;
-
-      tbody.innerHTML = items.map((item, index) => `
-        <tr class="${previewPage === 1 && index === 0 ? 'bg-green-50' : 'bg-white'}">
-          <td class="px-4 py-3 text-xs text-slate-600">${formatDateTime(item.timestamp)}</td>
-          <td class="px-4 py-3">${item.studentId || ''}</td>
-          <td class="px-4 py-3 truncate">${item.fullName || ''}</td>
-          <td class="px-4 py-3">${item.studyType || '-'}</td>
-          <td class="px-4 py-3">${item.position || ''}</td>
-          <td class="px-4 py-3">${renderStatusBadge(item.status || '')}</td>
-          <td class="px-4 py-3">${item.score || '-'}</td>
-        </tr>
-      `).join('');
-
-      if (!items.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-500">ยังไม่มีข้อมูลใน Google Sheets</td></tr>';
-      }
-
-      updatePaginationControls('preview', paged.page, paged.totalPages);
-    }
-
-    function renderDashboardTable() {
-      const keyword = document.getElementById('searchInput').value.toLowerCase();
-      const studyType = document.getElementById('studyTypeFilter').value;
-      const position = document.getElementById('positionFilter').value;
-      const status = document.getElementById('statusFilter').value;
-      const tbody = document.getElementById('submissionTable');
-
-      const filtered = submissions.filter((item) => {
-        const matchKeyword = `${item.studentId || ''} ${item.fullName || ''}`.toLowerCase().includes(keyword);
-        const matchStudyType = !studyType || item.studyType === studyType;
-        const matchPosition = !position || item.position === position;
-        const matchStatus = !status || item.status === status;
-        return matchKeyword && matchStudyType && matchPosition && matchStatus;
-      });
-
-      const sorted = sortByLatest(filtered);
-      const paged = paginate(sorted, dashboardPage);
-      dashboardPage = paged.page;
-      const items = paged.items;
-
-      tbody.innerHTML = items.map((item, index) => `
-        <tr class="${dashboardPage === 1 && index === 0 ? 'bg-green-50' : 'bg-white'}">
-          <td class="px-4 py-3 text-xs text-slate-600">${formatDateTime(item.timestamp)}</td>
-          <td class="px-4 py-3">${item.studentId || ''}</td>
-          <td class="px-4 py-3 truncate">${item.fullName || ''}</td>
-          <td class="px-4 py-3">${item.studyType || '-'}</td>
-          <td class="px-4 py-3">${item.position || ''}</td>
-          <td class="px-4 py-3">${renderStatusBadge(item.status || '')}</td>
-          <td class="px-4 py-3">${item.repoLink ? `<a class="text-green-700 underline break-all" href="${item.repoLink}" target="_blank">Repository</a>` : '-'}</td>
-          <td class="px-4 py-3">${item.demoLink ? `<a class="text-green-700 underline break-all" href="${item.demoLink}" target="_blank">Demo</a>` : '-'}</td>
-        </tr>
-      `).join('');
-
-      if (!items.length) {
-        tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-6 text-center text-slate-500">ไม่พบข้อมูล</td></tr>';
-      }
-
-      updatePaginationControls('dashboard', paged.page, paged.totalPages);
-      updateSummary();
-    }
-
-    async function lookupStudentById(studentId) {
-      const nameInput = document.querySelector('input[name="fullName"]');
-      const studyTypeInput = document.querySelector('input[name="studyType"]');
-      const statusEl = document.getElementById('studentLookupStatus');
-
-      if (!studentId) {
-        nameInput.value = '';
-        studyTypeInput.value = '';
-        statusEl.textContent = '';
-        return;
-      }
-
-      statusEl.textContent = 'กำลังค้นหาข้อมูลนิสิต...';
-
-      try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=student&studentId=${encodeURIComponent(studentId)}&_=${Date.now()}`);
-        if (!response.ok) throw new Error('ค้นหาข้อมูลนิสิตไม่สำเร็จ');
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          nameInput.value = result.data.fullName || '';
-          studyTypeInput.value = result.data.studyType || '';
-          statusEl.textContent = 'พบข้อมูลนิสิตแล้ว';
-        } else {
-          nameInput.value = '';
-          studyTypeInput.value = '';
-          statusEl.textContent = 'ไม่พบรหัสนิสิตนี้';
-        }
-      } catch (error) {
-        nameInput.value = '';
-        studyTypeInput.value = '';
-        statusEl.textContent = 'ค้นหาข้อมูลไม่สำเร็จ';
-        console.error(error);
-      }
-    }
-
-    async function loadExamLatestTable() {
-      const statusEl = document.getElementById('examLatestStatus');
-      statusEl.textContent = 'กำลังโหลดข้อมูล...';
-
-      try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=list&_=${Date.now()}`);
-        if (!response.ok) throw new Error('โหลดข้อมูลไม่สำเร็จ');
-        const result = await response.json();
-
-        if (result.success && Array.isArray(result.data)) {
-          submissions = sortByLatest(result.data);
-          previewPage = 1;
-          dashboardPage = 1;
-          renderExamLatestTable();
-          renderDashboardTable();
-          statusEl.textContent = `อัปเดตล่าสุด ${new Date().toLocaleString('th-TH')}`;
-        } else {
-          renderExamLatestTable();
-          statusEl.textContent = 'ไม่สามารถอ่านข้อมูลได้';
-        }
-      } catch (error) {
-        renderExamLatestTable();
-        statusEl.textContent = 'โหลดข้อมูลไม่สำเร็จ';
-        console.error(error);
-      }
-    }
-
-    async function loadSubmissions() {
-      const statusEl = document.getElementById('dashboardStatus');
-      statusEl.textContent = 'กำลังโหลดข้อมูล...';
-
-      try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=list&_=${Date.now()}`);
-        if (!response.ok) throw new Error('โหลดข้อมูลไม่สำเร็จ');
-        const result = await response.json();
-
-        if (result.success && Array.isArray(result.data)) {
-          submissions = sortByLatest(result.data);
-          previewPage = 1;
-          dashboardPage = 1;
-          renderDashboardTable();
-          renderExamLatestTable();
-
-          const nowText = new Date().toLocaleString('th-TH');
-          statusEl.textContent = `อัปเดตล่าสุด ${nowText} · รีเฟรชทุก ${REFRESH_INTERVAL_MS / 1000} วินาที`;
-
-          const examStatusEl = document.getElementById('examLatestStatus');
-          if (examStatusEl) {
-            examStatusEl.textContent = `อัปเดตล่าสุด ${nowText}`;
-          }
-        } else {
-          submissions = [];
-          renderDashboardTable();
-          renderExamLatestTable();
-          statusEl.textContent = 'ไม่สามารถอ่านข้อมูลได้';
-        }
-      } catch (error) {
-        statusEl.textContent = 'ใช้ข้อมูลตัวอย่างอยู่ หรือโหลดข้อมูลไม่สำเร็จ';
-        renderDashboardTable();
-        renderExamLatestTable();
-        console.error(error);
-      }
-    }
-
-    document.querySelector('select[name="position"]').addEventListener('change', (e) => {
-      const selected = e.target.value;
-      if (selected) {
-        selectRepo(selected);
-      }
-    });
-
-    document.querySelector('input[name="studentId"]').addEventListener('change', (e) => {
-      lookupStudentById(e.target.value.trim());
-    });
-
-    document.querySelector('input[name="studentId"]').addEventListener('blur', (e) => {
-      lookupStudentById(e.target.value.trim());
-    });
-
-    document.querySelector('input[name="studentId"]').addEventListener('input', (e) => {
-      const studentId = e.target.value.trim();
-      if (studentId.length >= 8) {
-        lookupStudentById(studentId);
-      }
-    });
-
-    document.getElementById('submissionForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const formData = Object.fromEntries(new FormData(form).entries());
-      formData.timestamp = new Date().toISOString();
-      formData.status = 'รอตรวจ';
-      formData.score = '';
-
-      const status = document.getElementById('formStatus');
-      status.textContent = 'กำลังส่งข้อมูล...';
-
-      if (!formData.fullName || !formData.studyType) {
-        status.textContent = 'กรุณากรอกรหัสนิสิตที่ถูกต้องเพื่อดึงข้อมูลอัตโนมัติก่อนส่ง';
-        return;
-      }
-
-      try {
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify(formData)
-        });
-
-        if (!res.ok) throw new Error('ส่งข้อมูลไม่สำเร็จ');
-        const result = await res.json();
-
-        if (result.success) {
-          status.textContent = 'ส่งข้อมูลเรียบร้อยแล้ว';
-          form.reset();
-
-          document.getElementById('repoUrl').textContent = 'เลือกตำแหน่งเพื่อแสดงคำสั่ง git clone';
-          document.getElementById('selectedRepoLabel').textContent = 'ยังไม่ได้เลือกตำแหน่ง';
-          document.getElementById('selectedRepoLink').textContent = 'กรุณาเลือกตำแหน่งก่อน';
-          document.getElementById('studentLookupStatus').textContent = '';
-
-          document.querySelectorAll('.repo-btn').forEach((btn) => {
-            btn.classList.remove('border-green-700', 'bg-green-50', 'ring-2', 'ring-green-200');
-          });
-
-          const openBtn = document.getElementById('openRepoBtn');
-          openBtn.href = '#';
-          openBtn.classList.add('pointer-events-none', 'opacity-50');
-
-          loadSubmissions();
-        } else {
-          status.textContent = `ส่งข้อมูลไม่สำเร็จ: ${result.message || 'Unknown error'}`;
-        }
-      } catch (error) {
-        status.textContent = 'เกิดข้อผิดพลาดในการส่งข้อมูล';
-        console.error(error);
-      }
-    });
-
-    setInterval(updateClock, 1000);
-    updateClock();
-    renderDashboardTable();
-    renderExamLatestTable();
-    loadSubmissions();
-    setInterval(loadSubmissions, REFRESH_INTERVAL_MS);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
